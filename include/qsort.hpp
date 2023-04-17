@@ -3,28 +3,7 @@
 
 #include <vector>
 
-template <typename T>
-T middle_of_three(T& a, T& b, T& c)
-{
-	if (a < b)
-	{
-		if (b < c)
-			return b;
-		else if (a < c)
-			return c;
-		else
-			return a;
-	}
-	else
-	{
-		if (a < c)
-			return a;
-		else if (b < c)
-			return c;
-		else
-			return b;
-	}
-}
+#include "cw_utils.hpp"
 
 template <typename T>
 void qsort_util(std::vector<T>& v, int left, int right)
