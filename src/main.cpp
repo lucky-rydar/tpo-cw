@@ -8,86 +8,10 @@
 
 #include "qsort.hpp"
 #include "qsort_async.hpp"
+#include "qsort_pool.hpp"
+#include "test_qsort.hpp"
 
 using namespace std;
-
-void test_qsort_sync() {
-	vector<int> v;
-	// generate 10 random numbers
-	for (int i = 0; i < 10; i++)
-		v.push_back(rand() % 100);
-
-	qsort(v);
-	
-	cout << "Sync sorted  : ";
-	for (auto i : v)
-		cout << i << " ";
-	cout << endl;
-}
-
-void test_qsort_async() {
-	vector<int> v;
-	// generate 10 random numbers
-	for (int i = 0; i < 10; i++)
-		v.push_back(rand() % 100);
-
-	qsort_async(v);
-
-	cout << "Async sorted : ";
-	for (auto i : v)
-		cout << i << " ";
-	cout << endl;
-}
-
-void test_qsort_correct() {
-	int size = 1'000'000;
-	int range = 10000;
-
-	vector<int> v;
-	for (int i = 0; i < size; i++)
-		v.push_back(rand() % range);
-
-	qsort(v);
-
-	vector<int> v2;
-	for (int i = 0; i < size; i++)
-		v2.push_back(v[i]);
-
-	std::sort(v2.begin(), v2.end());
-
-	for (int i = 0; i < v.size(); i++) {
-		if (v[i] != v2[i]) {
-			cout << "Sync qsort is not correct" << endl;
-			return;
-		}
-	}
-	cout << "Sync qsort is correct" << endl;
-}
-
-void test_qsort_async_correct() {
-	int size = 1'000'000;
-	int range = 10000;
-
-	vector<int> v;
-	for (int i = 0; i < size; i++)
-		v.push_back(rand() % range);
-
-	qsort_async(v);
-
-	vector<int> v2;
-	for (int i = 0; i < size; i++)
-		v2.push_back(v[i]);
-
-	std::sort(v2.begin(), v2.end());
-
-	for (int i = 0; i < v.size(); i++) {
-		if (v[i] != v2[i]) {
-			cout << "Async qsort is not correct" << endl;
-			return;
-		}
-	}
-	cout << "Async qsort is correct" << endl;
-}
 
 template <int SZ>
 void compare_qsorts(int n = 1'000'000) {
@@ -97,6 +21,7 @@ void compare_qsorts(int n = 1'000'000) {
 		v.push_back(rand() % n);
 
 	vector<int> v_async = v;
+	vector<int> v_async_pool = v;
 
 	auto start = chrono::high_resolution_clock::now();
 	qsort(v);
@@ -110,7 +35,29 @@ void compare_qsorts(int n = 1'000'000) {
 	auto duration_async = chrono::duration_cast<chrono::microseconds>(end - start);
 	cout << "Async qsort took " << (float)duration_async.count() / 1000.0f << " ms" << endl;
 
+	start = chrono::high_resolution_clock::now();
+	qsort_pool<int, SZ>(v_async_pool);
+	end = chrono::high_resolution_clock::now();
+	auto duration_async_pool = chrono::duration_cast<chrono::microseconds>(end - start);
+	cout << "Async qsort pool took " << (float)duration_async_pool.count() / 1000.0f << " ms" << endl;
+
+	// verify vectors
+	for (int i = 0; i < v.size(); i++) {
+		if (v[i] != v_async[i]) {
+			cout << "Sync and async qsorts are different" << endl;
+			return;
+		}
+		if (v[i] != v_async_pool[i]) {
+			cout << "Sync and async pool qsorts are different" << endl;
+			return;
+		}
+	}
+
+	puts("");
 	cout << "Async qsort was " << (float)duration_sync.count() / (float)duration_async.count() << " times faster" << endl;
+	cout << "Async qsort pool was " << (float)duration_sync.count() / (float)duration_async_pool.count() << " times faster" << endl;
+
+	puts("===============================");
 }
 
 string big_num_to_string(int n) {
@@ -128,25 +75,7 @@ string big_num_to_string(int n) {
 int main() {
 	srand(time(NULL));
 
-	// puts("");
-	// LOG("Test qsort sync");
-	// test_qsort_sync();
-	// LOG("Passed");
-
-	// puts("");
-	// LOG("Test qsort async");
-	// test_qsort_async();
-	// LOG("Passed");
-
-	// puts("");
-	// LOG("Test qsort correct");
-	// test_qsort_correct();
-	// LOG("Passed");
-
-	// puts("");
-	// LOG("Test qsort async correct");
-	// test_qsort_async_correct();
-	// LOG("Passed");
+	run_tests();
 
 	auto range = {100'000, 1'000'000, 10'000'000, 100'000'000 /*,1'000'000'000*/};
 
