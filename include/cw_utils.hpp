@@ -34,4 +34,22 @@ T middle_of_three(T& a, T& b, T& c)
 	}
 }
 
+template <typename T>
+void partition(std::vector<T>& v, int left, int right, int pivot, int& i, int& j)
+{
+	while (i <= j)
+	{
+		while (v[i] < pivot)
+			i++;
+		while (v[j] > pivot)
+			j--;
+		if (i <= j)
+		{
+			std::swap(v[i], v[j]);
+			i++;
+			j--;
+		}
+	}
+}
+
 #endif // CW_UTILS_HPP_

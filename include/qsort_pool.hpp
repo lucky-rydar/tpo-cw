@@ -19,18 +19,7 @@ void qsort_pool_util(std::vector<T>& v, int left, int right, boost::asio::thread
 	int i = left;
 	int j = right;
 	T pivot = middle_of_three(v[left], v[(left + right) / 2], v[right]);
-
-	while (i <= j) {
-		while (v[i] < pivot)
-			i++;
-		while (v[j] > pivot)
-			j--;
-		if (i <= j) {
-			std::swap(v[i], v[j]);
-			i++;
-			j--;
-		}
-	}
+	partition(v, left, right, pivot, i, j);
 
 	if (left < j) {
 		if (j - left < sync_size) {
