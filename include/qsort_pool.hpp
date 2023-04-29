@@ -18,7 +18,8 @@ template <typename T, int sync_size = 10'000>
 void qsort_pool_util(std::vector<T>& v, int left, int right, boost::asio::thread_pool&& tp) {
 	int i = left;
 	int j = right;
-	T pivot = middle_of_three(v[left], v[(left + right) / 2], v[right]);
+
+	T pivot = get_pivot(v, left, right);
 	partition(v, left, right, pivot, i, j);
 
 	if (left < j) {

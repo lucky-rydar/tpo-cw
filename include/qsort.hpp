@@ -10,7 +10,8 @@ void qsort_util(std::vector<T>& v, int left, int right)
 {
 	int i = left;
 	int j = right;
-	T pivot = middle_of_three(v[left], v[(left + right) / 2], v[right]);
+
+	T pivot = get_pivot(v, left, right);
 	partition(v, left, right, pivot, i, j);
 
 	if (left < j)

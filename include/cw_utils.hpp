@@ -35,6 +35,12 @@ T middle_of_three(T& a, T& b, T& c)
 }
 
 template <typename T>
+T get_pivot(std::vector<T>& v, int left, int right)
+{
+	return middle_of_three(v[left], v[(left + right) / 2], v[right]);
+}
+
+template <typename T>
 void partition(std::vector<T>& v, int left, int right, int pivot, int& i, int& j)
 {
 	while (i <= j)
