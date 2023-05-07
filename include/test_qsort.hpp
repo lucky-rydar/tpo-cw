@@ -14,34 +14,6 @@
 
 using namespace std;
 
-void test_qsort_sync() {
-	vector<int> v;
-	// generate 10 random numbers
-	for (int i = 0; i < 10; i++)
-		v.push_back(rand() % 100);
-
-	qsort(v);
-	
-	cout << "Sync sorted  : ";
-	for (auto i : v)
-		cout << i << " ";
-	cout << endl;
-}
-
-void test_qsort_async() {
-	vector<int> v;
-	// generate 10 random numbers
-	for (int i = 0; i < 10; i++)
-		v.push_back(rand() % 100);
-
-	qsort_async(v);
-
-	cout << "Async sorted : ";
-	for (auto i : v)
-		cout << i << " ";
-	cout << endl;
-}
-
 void test_qsort_correct() {
 	int size = 1'000'000;
 	int range = 10000;
@@ -119,8 +91,6 @@ void test_qsort_pool_verify() {
 
 void run_tests() {
 	std::vector<std::function<void()>> tests = {
-		test_qsort_sync,
-		test_qsort_async,
 		test_qsort_correct,
 		test_qsort_async_correct,
 		test_qsort_pool_verify
