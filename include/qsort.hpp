@@ -12,7 +12,7 @@ void qsort_util(std::vector<T>& v, int left, int right)
 	int j = right;
 
 	T pivot = get_pivot(v, left, right);
-	partition(v, left, right, pivot, i, j);
+	partition(v, pivot, i, j);
 
 	if (left < j)
 		qsort_util(v, left, j);

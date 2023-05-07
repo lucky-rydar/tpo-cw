@@ -13,7 +13,7 @@ void qsort_async_util(std::vector<T>& v, int left, int right)
 	int j = right;
 
 	T pivot = get_pivot(v, left, right);
-	partition(v, left, right, pivot, i, j);
+	partition(v, pivot, i, j);
 
 	std::future<void> left_future;
 	std::future<void> right_future;

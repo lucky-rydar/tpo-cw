@@ -41,7 +41,7 @@ T get_pivot(std::vector<T>& v, int left, int right)
 }
 
 template <typename T>
-void partition(std::vector<T>& v, int left, int right, int pivot, int& i, int& j)
+void partition(std::vector<T>& v, int pivot, int& i, int& j)
 {
 	while (i <= j)
 	{
